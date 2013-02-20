@@ -1,10 +1,4 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Jérémie Mercuri
- * Date: 20/02/13
- * Time: 14:41
- * cette classe gère fonctinemment général du jeu
- */
+
 import java.awt.*;
 import java.util.Random;
 
