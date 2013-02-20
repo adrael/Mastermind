@@ -10,5 +10,5 @@ import java.awt.Color;
 
 
 public class Pawn {
-    private Color colorOfPawn;
+    private Color colorOfPawn = colo;
 }
