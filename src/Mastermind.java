@@ -23,7 +23,8 @@ public class Mastermind {
         nbPawn = nb;
         nbTry = 0;
         result = false;
-    }
+    } 
+}/*
 
     public void generate()
     {
@@ -112,4 +113,4 @@ public class Mastermind {
             }
         }
         return nbMal;
-    }
+    }*/
