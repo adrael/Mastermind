@@ -23,6 +23,7 @@ public class Mastermind {
         nbColor = color;
         nbTry = 0;
         result = false;
+        solution = null;
     }
 
     public void generate()
