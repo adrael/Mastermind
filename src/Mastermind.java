@@ -1,44 +1,80 @@
 /**
  * Created with IntelliJ IDEA.
- * User: J√©r√©mie Mercuri
+ * User: JÈrÈmie
  * Date: 20/02/13
- * Time: 14:41
- * cette classe g√®re fonctinemment g√©n√©ral du jeu
+ * Time: 14:24
  */
+
 import java.awt.*;
 import java.util.Random;
 
 public class Mastermind {
-    private PawnGame solution; //combinaison g√©n√©r√©e par la fonction generate
+    private PawnGame solution; //combinaison gÈnÈrÈe par la fonction generate
     private PawnGame player;   //combinaison du joueur
     private int nbTry;         //nombres d'essais du joueur
     private int nbTryMax;      //nombres d'essais maximum
-    private int nbColor;       //nombres de couleurs
+    private int nbPawn;        //nombres de pions
     private boolean result;    //resultat de la comparaison entre la combinaison du joueur et la solution
     private Color tabColor[]={Color.red,Color.yellow,Color.green,Color.blue,Color.white,Color.black};
 
-    public Mastermind(int trys, int color)
+    public Mastermind(int trys, int nb)
     {
         nbTryMax = trys;
-        nbColor = color;
+        nbPawn = nb;
         nbTry = 0;
         result = false;
-        solution = null;
     }
 
     public void generate()
     {
-         solution = new PawnGame();
+        solution = new PawnGame();
         Random r = new Random();
         int n;
-        for(int i=0; i<nbColor; i++)
+        for(int i=0; i<nbPawn; i++)
         {
             n = r.nextInt(6);
-            solution[i]=
+            solution[i]=tabColor[n];
         }
     }
+    
+    public void setPlayer(PawnGame p)
+    {
+    	player = p;
+    }
+    
+    public void incNbTry()
+    {
+    	nbTry++;
+    }
+    
+    public int getGoodPawn()	//retourne le nombre de pions bien placÈs; et met result ‡ true si la combinaison est bonne
+    {
+    	int nb=0;
+    	for(int i=0;i<nbPawn;i++)
+    		if(player[i]==solution[i]) 
+    			nb++;
+    	if(nb==nbPawn) 
+    		result=true;
+    	return nb;
+    }
+    
+    public int getBadPawn()		//retroune le nombre de pions mal placÈs.
+    {
+    	int nb=0;
+    	
+    	return nb;
+    }
+    
+    public boolean getResult()
+    {
+    	return result;
+    }
+    
+    public PawnGame getSolution()
+    {
+    	return solution;
+    }
 }
-
 
 /*
 import java.awt.*;
