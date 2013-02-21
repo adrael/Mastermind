@@ -76,62 +76,6 @@ public class Mastermind {
     }
 }
 
-/*
-import java.awt.*;
-import java.util.Random;
-
-public class Mastermind
-{
-    private Color laSolution[];
-    private Color joueurSolution[];
-    private Color tabColor[]={Color.red,Color.yellow,Color.green,Color.blue,Color.white,Color.black};
-    private int nbCouleur;
-    private int nbEssais;
-    private int nbEssaisMAx;
-    private boolean resu;
-
-    public Mastermind(int unNbEssaisMax, int unNbCouleur)
-    {
-        nbEssaisMAx = unNbEssaisMax;
-        nbEssais = 0;
-        nbCouleur = unNbCouleur;
-        resu = false;
-    }
-
-    public void genererSolution() //méthode permétant de générer une solution
-    {
-        laSolution = new Color[nbCouleur];
-        Random r = new Random();
-        int n;
-        for(int i=0;i<nbCouleur;i++)
-        {
-            n = r.nextInt(6);
-            laSolution[i]=tabColor[n];
-        }
-    }
-
-    public void setJoueurSolution(Color[] unTabColor)
-    {
-        joueurSolution = unTabColor;
-    }
-
-    public void setNbEssais() //incrémente le nombre d'éssais de 1
-    {
-        nbEssais++;
-    }
-
-    public int getBienPlace() //retourne le nombre de couleurs bien placées
-    {
-        int nbBien=0;
-
-        for(int i=0;i<nbCouleur;i++)
-        {
-            if (joueurSolution[i]==laSolution[i]) nbBien++;
-        }
-        if (nbBien==nbCouleur) resu=true;
-        return nbBien;
-    }
-
     public int getMalPlace() //return le nombre de couleurs mal placées
     {
         int nbMal=0;
@@ -169,35 +113,3 @@ public class Mastermind
         }
         return nbMal;
     }
-
-    public void init()
-    {
-        nbEssais=0;
-        resu=false;
-    }
-
-    public int getNbCouleur()
-    {
-        return nbCouleur;
-    }
-
-    public int getNbEssaisMax()
-    {
-        return nbEssaisMAx;
-    }
-
-    public int getNbEssais()
-    {
-        return nbEssais;
-    }
-
-    public boolean getResu()
-    {
-        return resu;
-    }
-
-    public Color getSolution(int i)
-    {
-        return laSolution[i];
-    }
-}*/
