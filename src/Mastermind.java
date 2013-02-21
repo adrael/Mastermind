@@ -1,9 +1,15 @@
-
+/**
+ * Created with IntelliJ IDEA.
+ * User: Jérémie Mercuri
+ * Date: 20/02/13
+ * Time: 14:41
+ * cette classe gère fonctinemment général du jeu
+ */
 import java.awt.*;
 import java.util.Random;
 
 public class Mastermind {
-    private PawnGame solution; //combinaison g�n�r�e par la fonction generate
+    private PawnGame solution; //combinaison générée par la fonction generate
     private PawnGame player;   //combinaison du joueur
     private int nbTry;         //nombres d'essais du joueur
     private int nbTryMax;      //nombres d'essais maximum
@@ -27,7 +33,7 @@ public class Mastermind {
         for(int i=0; i<nbColor; i++)
         {
             n = r.nextInt(6);
-            solution[i]=tabColor[n];
+            solution[i]=
         }
     }
 }

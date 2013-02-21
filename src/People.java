@@ -1,11 +1,9 @@
 /**
  * Created with IntelliJ IDEA.
  * User: Felix
- * Date: 15/02/13
- * Time: 11:08
+ * Date: 20/02/13
+ * Time: 16:45
  * To change this template use File | Settings | File Templates.
  */
-public class Plate {
-    private int numberOfRow;
-    private int numberOfPawn;
+public interface People {
 }
