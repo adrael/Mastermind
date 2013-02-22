@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -22,11 +24,10 @@ public class GraphicUI implements ActionListener {
 	private final Container globalPane, menuPane, gamePane;
 	private final RoundButton green, blue, red, yellow, black, white, none;
 	private final JButton newGame, resetLine, valid, quit, resetPawn;
-	private int currentRow = 0;
-	private int currentPawn = 0;
-	private final int numberOfPawnPerRow = 4;
-	private final int numberOfRow = 12;
+	private final int numberOfPawnPerRow = 4, numberOfRow = 12;
 	private final ArrayList<RoundButton[]> rows = new ArrayList<>();
+	
+	private int currentRow = 0, currentPawn = 0;
 
 	public GraphicUI() throws Exception {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -45,18 +46,6 @@ public class GraphicUI implements ActionListener {
 		this.white = new RoundButton(Color.WHITE, 10);
 		this.yellow = new RoundButton(Color.YELLOW, 10);
 
-		this.window = new JFrame("Mastermind");
-		this.window.setVisible(true);
-		this.window.setResizable(false);
-		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		this.globalPane = this.window.getContentPane();
-		this.globalPane.setLayout(new BorderLayout());
-
-		this.menuPane = new Container();
-		this.menuPane.setPreferredSize(new Dimension(200, 400));
-		this.menuPane.setLayout(new BoxLayout(this.menuPane, BoxLayout.Y_AXIS));
-
 		this.red.addActionListener(this);
 		this.blue.addActionListener(this);
 		this.green.addActionListener(this);
@@ -70,30 +59,64 @@ public class GraphicUI implements ActionListener {
 		this.valid.addActionListener(this);
 		this.quit.addActionListener(this);
 
+		this.window = new JFrame("Mastermind");
+		this.window.setVisible(true);
+		this.window.setResizable(false);
+		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		this.globalPane = this.window.getContentPane();
+		this.globalPane.setLayout(new BorderLayout());
+
+		this.menuPane = new Container();
+		this.menuPane.setPreferredSize(new Dimension(200, 400));
+		this.menuPane.setLayout(new BoxLayout(this.menuPane, BoxLayout.Y_AXIS));
+
+		this.gamePane = new Container();
+		this.gamePane.setLayout(new BoxLayout(this.gamePane, BoxLayout.Y_AXIS));
+		
+		this.globalPane.add(gamePane, BorderLayout.WEST);
+		this.globalPane.add(menuPane, BorderLayout.EAST);
+
+		initDisplay();
+		createMenu();
+
+
+		this.window.pack();
+	}
+	
+	private void createMenu() {
 		addButton(this.red, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
 		addButton(this.blue, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
 		addButton(this.green, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
 		addButton(this.yellow, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
 		addButton(this.black, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
 		addButton(this.white, this.menuPane, 0, 50, Component.CENTER_ALIGNMENT);
+		
 		addButton(this.valid, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
-		addButton(this.resetPawn, this.menuPane, 0, 10,
-				Component.CENTER_ALIGNMENT);
-		addButton(this.resetLine, this.menuPane, 0, 10,
-				Component.CENTER_ALIGNMENT);
-		addButton(this.newGame, this.menuPane, 0, 10,
-				Component.CENTER_ALIGNMENT);
+		addButton(this.resetPawn, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
+		addButton(this.resetLine, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
+		addButton(this.newGame, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
 		addButton(this.quit, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
 
-		this.gamePane = new Container();
-		this.gamePane.setLayout(new BoxLayout(this.gamePane, BoxLayout.Y_AXIS));
+		JLabel scores = new JLabel("SCORES");
+		JLabel CPU = new JLabel("CPU : 0");
+		JLabel player = new JLabel("Joueur : 0");
+		
+		scores.setFont(new Font(scores.getFont().getName(), Font.BOLD, 30));
+		CPU.setFont(new Font(CPU.getFont().getName(), Font.BOLD, 18));
+		player.setFont(new Font(player.getFont().getName(), Font.BOLD, 18));
 
-		initDisplay();
+		scores.setAlignmentX(Component.CENTER_ALIGNMENT);
+		CPU.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		player.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
-		this.globalPane.add(gamePane, BorderLayout.WEST);
-		this.globalPane.add(menuPane, BorderLayout.EAST);
-
-		this.window.pack();
+		this.menuPane.add(Box.createRigidArea(new Dimension(0, 100)));
+		this.menuPane.add(scores);
+		this.menuPane.add(Box.createRigidArea(new Dimension(0, 20)));
+		this.menuPane.add(CPU);
+		this.menuPane.add(player);
+		this.menuPane.setPreferredSize(new Dimension(300, this.menuPane.getPreferredSize().height));
+		
 	}
 
 	private void displayGame() {
@@ -110,9 +133,27 @@ public class GraphicUI implements ActionListener {
 			x.setPreferredSize(new Dimension(100, 3));
 
 			this.gamePane.add(x);
-			c.add(displaySolution(this.numberOfPawnPerRow));
+			c.add(displayPawnSolution(this.numberOfPawnPerRow));
 			this.gamePane.add(c);
 		}
+		
+		Container c = new Container();
+		c.setLayout(new FlowLayout());
+		
+		JLabel solutionLabel = new JLabel("Solution :");
+		solutionLabel.setFont(new Font(solutionLabel.getFont().getName(), Font.BOLD, solutionLabel.getFont().getSize()));
+
+		JSeparator x = new JSeparator(SwingConstants.HORIZONTAL);
+		x.setPreferredSize(new Dimension(100, 3));
+
+		c.add(solutionLabel);
+		c.add(Box.createRigidArea(new Dimension(20, 20)));
+		
+		for (int j = 0; j < this.numberOfPawnPerRow; ++j)
+			addButton(new RoundButton(Color.GRAY, 10), c, 1, 20, 0);
+		
+		this.gamePane.add(x);
+		this.gamePane.add(c);
 	}
 
 	private void initDisplay() {
@@ -126,7 +167,7 @@ public class GraphicUI implements ActionListener {
 		displayGame();
 	}
 
-	private Container displaySolution(int pawn) {
+	private Container displayPawnSolution(int pawn) {
 		Container c = new Container();
 		c.setLayout(new GridLayout(pawn / 2, 2, 5, 5));
 		c.setPreferredSize(new Dimension(pawn * 5, pawn * 5));
@@ -136,8 +177,7 @@ public class GraphicUI implements ActionListener {
 		return c;
 	}
 
-	private void addButton(JButton button, Container container, int vh,
-			int space, float alignment) {
+	private void addButton(JButton button, Container container, int vh, int space, float alignment) {
 		if (alignment > 0)
 			button.setAlignmentX(alignment);
 
