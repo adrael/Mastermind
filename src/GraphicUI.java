@@ -217,7 +217,7 @@ public class GraphicUI implements ActionListener {
 	}
 
 	private void resetLastPawn() {
-		if (this.currentPawn >= 0) {
+		if (this.currentPawn > 0) {
 			this.currentPawn--;
 			this.rows.get(this.currentRow)[this.currentPawn].setBackground(Color.GRAY);
 			this.rows.get(this.currentRow)[this.currentPawn].setSize(10, 10);
