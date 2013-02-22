@@ -9,14 +9,12 @@ import javax.swing.JButton;
 @SuppressWarnings("serial")
 public class RoundButton extends JButton {
 	private Shape shape = null;
-	private Dimension size = null;
 
 	public RoundButton(Color c, int s) {
 		super();
 
-		this.size = new Dimension(s, s);
-		setPreferredSize(this.size);
-
+		setSize(s, s);
+		setPreferredSize(new Dimension(s, s));
 		setContentAreaFilled(false);
 		
 		if(!(c == null))
@@ -42,12 +40,5 @@ public class RoundButton extends JButton {
 		if (this.shape == null || !this.shape.getBounds().equals(getBounds()))
 			this.shape = new Ellipse2D.Float(0, 0, getWidth(), getHeight());
 		return this.shape.contains(x, y);
-	}
-	
-	public void setDimension(Dimension d) {
-		d.width = d.height = Math.max(d.width, d.height);
-		this.size = d;
-		setSize(this.size);
-		setPreferredSize(this.size);
 	}
 }
