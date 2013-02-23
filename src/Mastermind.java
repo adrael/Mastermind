@@ -1,8 +1,8 @@
 import java.awt.Color;
+import java.util.Random;
 
 public class Mastermind {
     private PawnGame[] solution; //combinaison générée par la fonction generate
-    private int nbTry;         	 //nombres d'essais du joueur
     private int nbTryMax;        //nombres d'essais maximum
     private int nbPawn;          //nombres de pions
     private Player player;
@@ -19,32 +19,51 @@ public class Mastermind {
     
     public void setPlayer(Player p) {
     	this.player = p;
+    	this.nbPawn = this.player.getPawnNumber();
+    	this.nbTryMax = this.player.getRowNumber();
     }
     
     public Player getPlayer() {
     	return this.player;
     }
-}
 
-/*
 
-    public void generateSolution()
-    {
-        solution = new PawnGame();
+    public void generateSolution() {
+        solution = new PawnGame[this.nbPawn];
         Random r = new Random();
-        int n;
-        for(int i=0; i<nbPawn; i++)
-        {
-            n = r.nextInt(6);
-            solution[i]=tabColor[n];
-        }
+        final Color[] possibleColors = new Color[this.player.getColorNumber()];
+        
+        for(int i = 0; i < possibleColors.length; ++i)
+        	possibleColors[i] = this.pawnColors[i];
+        
+        for(int i = 0; i < this.nbPawn; ++i)
+            this.solution[i] = new PawnGame(possibleColors[r.nextInt(this.player.getColorNumber())], 20);
     }
     
-    public void setPlayer(PawnGame p)
-    {
-    	player = p;
+    public PawnGame[] getSolution() {
+    	return this.solution;
     }
     
+    public boolean checkSolution(PawnGame[] playerSolution, PawnSolution[] tips) {
+    	boolean good = true;
+    	
+    	for(int i = 0; i < playerSolution.length; ++i)
+    		if(playerSolution[i].getPawnColor() != solution[i].getPawnColor()) {
+    			good = false;
+    			break;
+    		}
+    	
+    	if(!good)
+    		makeTips(tips);
+    	
+    	return good;
+    }
+    
+    private void makeTips(PawnSolution[] tips) {
+    	
+    }
+}
+/*    
     public void incNbTry()
     {
     	nbTry++;
@@ -71,11 +90,6 @@ public class Mastermind {
     public boolean getResult()
     {
     	return result;
-    }
-    
-    public PawnGame getSolution()
-    {
-    	return solution;
     }
 }
 
