@@ -7,18 +7,17 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.JButton;
 
 @SuppressWarnings("serial")
-public class RoundButton extends JButton {
+public class RoundButton extends JButton implements Pawn {
 	private Shape shape = null;
 
 	public RoundButton(Color c, int s) {
 		super();
 
-		setSize(s, s);
-		setPreferredSize(new Dimension(s, s));
 		setContentAreaFilled(false);
+		setPawnDimension(new Dimension(s, s));
 		
 		if(!(c == null))
-			setBackground(c);
+			setPawnColor(c);
 	}
 
 	protected void paintComponent(Graphics g) {
@@ -40,5 +39,28 @@ public class RoundButton extends JButton {
 		if (this.shape == null || !this.shape.getBounds().equals(getBounds()))
 			this.shape = new Ellipse2D.Float(0, 0, getWidth(), getHeight());
 		return this.shape.contains(x, y);
+	}
+
+	@Override
+	public void setPawnColor(Color c) {
+		setBackground(c);
+		
+	}
+
+	@Override
+	public void setPawnDimension(Dimension d) {
+		setSize(d);
+		setPreferredSize(d);
+		
+	}
+
+	@Override
+	public Color getPawnColor() {
+		return getBackground();
+	}
+
+	@Override
+	public Dimension getPawnDimension() {
+		return getSize();
 	}
 }

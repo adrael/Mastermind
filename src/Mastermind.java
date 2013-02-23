@@ -1,32 +1,34 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Jérémie
- * Date: 20/02/13
- * Time: 14:24
- */
-
-import java.awt.*;
-import java.util.Random;
+import java.awt.Color;
 
 public class Mastermind {
-    private PawnGame solution; //combinaison générée par la fonction generate
-    private PawnGame player;   //combinaison du joueur
-    private int nbTry;         //nombres d'essais du joueur
-    private int nbTryMax;      //nombres d'essais maximum
-    private int nbPawn;        //nombres de pions
-    private boolean result;    //resultat de la comparaison entre la combinaison du joueur et la solution
-    private Color tabColor[]={Color.red,Color.yellow,Color.green,Color.blue,Color.white,Color.black};
+    private PawnGame[] solution; //combinaison générée par la fonction generate
+    private int nbTry;         	 //nombres d'essais du joueur
+    private int nbTryMax;        //nombres d'essais maximum
+    private int nbPawn;          //nombres de pions
+    private Player player;
+    
+    private final Color[] pawnColors = {Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE, Color.CYAN, Color.PINK, Color.MAGENTA, Color.ORANGE, Color.WHITE};
 
-    public Mastermind(int trys, int nb)
-    {
-        nbTryMax = trys;
-        nbPawn = nb;
-        nbTry = 0;
-        result = false;
-    } 
-}/*
+    public Mastermind() {
+    	
+    }
+    
+    public Color[] getPawnColors() {
+    	return this.pawnColors;
+    }
+    
+    public void setPlayer(Player p) {
+    	this.player = p;
+    }
+    
+    public Player getPlayer() {
+    	return this.player;
+    }
+}
 
-    public void generate()
+/*
+
+    public void generateSolution()
     {
         solution = new PawnGame();
         Random r = new Random();

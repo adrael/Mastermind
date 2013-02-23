@@ -1,11 +1,29 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Felix
- * Date: 15/02/13
- * Time: 11:08
- * To change this template use File | Settings | File Templates.
- */
+
 public class Plate {
-    private int numberOfRow;
-    private int numberOfPawn;
+    private int numberOfRow, numberOfPawn;
+    
+    public Plate() {
+    	
+    }
+    
+    public Plate(int r, int p) {
+    	setNumberOfRow(r);
+    	setNumberOfPawn(p);
+    }
+    
+    public void setNumberOfRow(int n) {
+    	this.numberOfRow = n;
+    }
+    
+    public int getNumberOfRow() {
+    	return this.numberOfRow;
+    }
+    
+    public void setNumberOfPawn(int n) {
+    	this.numberOfPawn = n;
+    }
+    
+    public int getNumberOfPawn() {
+    	return this.numberOfPawn;
+    }
 }
