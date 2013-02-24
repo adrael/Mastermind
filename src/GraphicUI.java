@@ -28,12 +28,13 @@ public class GraphicUI implements ActionListener {
 	private final Container globalPane, menuPane, gamePane, playerPane, solutionPane;
 	private final JButton newGame, resetLine, valid, quit, resetPawn,
 			validPlayer, quitPlayer;
-	private final ArrayList<PawnGame[]> rows = new ArrayList<>();
 	private final Mastermind manager;
 	private final JTextField name;
 	private final JSpinner rowsNumber, pawns, colors;
 	private final JLabel nameLabel, rowsLabel, pawnsLabel, colorsLabel, CPU,
 			playerLabel, solutionLabel;
+	private final ArrayList<PawnGame[]> rows = new ArrayList<>();
+	private final ArrayList<PawnSolution[]> tips = new ArrayList<>();
 
 	private Player player;
 	private int currentRow = 0, currentPawn = 0, numberOfPawnPerRow = 4,
@@ -66,12 +67,12 @@ public class GraphicUI implements ActionListener {
 				Font.BOLD, this.nameLabel.getFont().getSize()));
 
 		this.rowsLabel = new JLabel("Nombre d'essais :");
-		this.rowsNumber = new JSpinner(new SpinnerNumberModel(12, 1, 12, 1));
+		this.rowsNumber = new JSpinner(new SpinnerNumberModel(12, 1, 12, 2));
 		this.rowsLabel.setFont(new Font(this.rowsLabel.getFont().getName(),
 				Font.BOLD, this.rowsLabel.getFont().getSize()));
 
 		this.pawnsLabel = new JLabel("Nombre de pions :");
-		this.pawns = new JSpinner(new SpinnerNumberModel(4, 2, 6, 1));
+		this.pawns = new JSpinner(new SpinnerNumberModel(4, 4, 8, 2));
 		this.pawnsLabel.setFont(new Font(this.pawnsLabel.getFont().getName(),
 				Font.BOLD, this.pawnsLabel.getFont().getSize()));
 
@@ -143,11 +144,16 @@ public class GraphicUI implements ActionListener {
 
 	private void initGameDisplay() {
 		this.rows.clear();
+		this.tips.clear();
 		for (int i = 0; i < this.numberOfRow; ++i) {
 			PawnGame[] tmp = new PawnGame[this.numberOfPawnPerRow];
-			for (int j = 0; j < this.numberOfPawnPerRow; ++j)
+			PawnSolution[] tmp2 = new PawnSolution[this.numberOfPawnPerRow];
+			for (int j = 0; j < this.numberOfPawnPerRow; ++j) {
 				tmp[j] = new PawnGame(Color.GRAY, 10);
+				tmp2[j] = new PawnSolution(Color.WHITE, 10);
+			}
 			this.rows.add(tmp);
+			this.tips.add(tmp2);
 		}
 		displayGame();
 	}
@@ -211,6 +217,47 @@ public class GraphicUI implements ActionListener {
 		this.menuPane.add(c);
 		this.menuPane.add(Box.createRigidArea(new Dimension(0, 20)));
 
+		PawnSolution black = new PawnSolution(Color.BLACK, 10);
+		PawnSolution red = new PawnSolution(Color.RED, 10);
+		PawnSolution white = new PawnSolution(Color.WHITE, 10);
+		
+		JLabel legend = new JLabel("Légende");
+		legend.setFont(new Font(legend.getFont().getName(), Font.BOLD, 13));
+		legend.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JLabel whiteLabel = new JLabel(" Mauvais pion                          ");
+		JLabel blackLabel = new JLabel(" Pion mal placé, bonne couleur");
+		JLabel redLabel = new JLabel(" Pion bien placé, bonne couleur");
+		
+		Container c0 = new Container();
+		c0.setLayout(new FlowLayout());
+		c0.add(white);
+		c0.add(whiteLabel);
+		
+		Container c1 = new Container();
+		c1.setLayout(new FlowLayout());
+		c1.add(black);
+		c1.add(blackLabel);
+		
+		Container c2 = new Container();
+		c2.setLayout(new FlowLayout());
+		c2.add(red);
+		c2.add(redLabel);
+
+		this.menuPane.add(legend);
+		this.menuPane.add(Box.createRigidArea(new Dimension(0, 10)));
+		this.menuPane.add(c0);
+		this.menuPane.add(c1);
+		this.menuPane.add(c2);
+		this.menuPane.add(Box.createRigidArea(new Dimension(0, 20)));
+		
+		JLabel action = new JLabel("Actions");
+		action.setFont(new Font(action.getFont().getName(), Font.BOLD, 13));
+		action.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		this.menuPane.add(action);
+		this.menuPane.add(Box.createRigidArea(new Dimension(0, 10)));
+
 		addButton(this.valid, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
 		addButton(this.resetPawn, this.menuPane, 0, 10,
 				Component.CENTER_ALIGNMENT);
@@ -264,7 +311,7 @@ public class GraphicUI implements ActionListener {
 
 			this.gamePane.add(x);
 			if (this.player.getRowNumber() > 1)
-				c.add(displayPawnSolution());
+				c.add(displayPawnSolution(i));
 			this.gamePane.add(c);
 		}
 
@@ -280,13 +327,13 @@ public class GraphicUI implements ActionListener {
 		this.gamePane.add(this.solutionPane);
 	}
 
-	private Container displayPawnSolution() {
+	private Container displayPawnSolution(int row) {
 		Container c = new Container();
 		c.setLayout(new GridLayout(this.numberOfPawnPerRow / 2, 2, 5, 5));
 		c.setPreferredSize(new Dimension(this.numberOfPawnPerRow * 5, this.numberOfPawnPerRow * 5));
 
 		for (int i = 0; i < this.numberOfPawnPerRow; ++i)
-			c.add(new RoundButton(Color.black, 5));
+			c.add(this.tips.get(row)[i]);
 		return c;
 	}
 	
@@ -294,10 +341,10 @@ public class GraphicUI implements ActionListener {
 		this.solutionPane.removeAll();
 		PawnGame[] solution = this.manager.getSolution();
 
-		this.solutionPane.add(solutionLabel);
+		this.solutionPane.add(this.solutionLabel);
 		
 		for (int j = 0; j < solution.length; ++j)
-			addButton(display ? solution[j] : new RoundButton(Color.GRAY, 10), this.solutionPane, 1, 20, 0);
+			addButton(display ? solution[j] : new RoundButton(Color.GRAY, 10), this.solutionPane, 100, 20, 0);
 	}
 
 	private void addButton(JButton button, Container container, int vh,
@@ -349,10 +396,9 @@ public class GraphicUI implements ActionListener {
 			}
 
 		if (isCorrectSolution) {
-			PawnSolution[] tips = new PawnSolution[this.numberOfPawnPerRow];
 			Integer n = null;
 
-			if (this.manager.checkSolution(this.rows.get(this.currentRow), tips)) {
+			if (this.manager.checkSolution(this.rows.get(this.currentRow), this.tips.get(this.currentRow))) {
 				manageCommands(false);
 				++this.scorePlayer;
 				n = JOptionPane
@@ -364,14 +410,14 @@ public class GraphicUI implements ActionListener {
 				this.currentRow++;
 				this.currentPawn = 0;
 			} else {
-				displaySolution(true);
-				manageCommands(false);
-				++this.scoreCPU;
 				n = JOptionPane
 						.showConfirmDialog(
 								this.window,
 								"Vous avez perdu...\nVoulez-vous faire une nouvelle partie ?",
 								"Défaite..", JOptionPane.YES_NO_OPTION);
+				displaySolution(true);
+				manageCommands(false);
+				++this.scoreCPU;
 			}
 
 			updateScores();
@@ -393,17 +439,11 @@ public class GraphicUI implements ActionListener {
 	private void resetAll() {
 		for (int i = 0; i < this.numberOfRow; ++i) {
 			for (int j = 0; j < this.numberOfPawnPerRow; ++j) {
-				this.rows.get(i)[j].setBackground(Color.GRAY);
+				this.rows.get(i)[j].setPawnColor(Color.GRAY);
 				this.rows.get(i)[j].setSize(10, 10);
+				this.tips.get(i)[j].setPawnColor(Color.WHITE);
 			}
 		}
-		
-		this.manager.generateSolution();
-		displaySolution(false);
-		manageCommands(true);
-		
-		this.currentPawn = 0;
-		this.currentRow = 0;
 
 		// 0 = YES
 		// 1 = NO
@@ -412,6 +452,13 @@ public class GraphicUI implements ActionListener {
 				JOptionPane.YES_NO_OPTION);
 		if (n == 0)
 			createPlayer();
+		
+		this.manager.generateSolution();
+		displaySolution(false);
+		manageCommands(true);
+		
+		this.currentPawn = 0;
+		this.currentRow = 0;
 	}
 
 	@Override
