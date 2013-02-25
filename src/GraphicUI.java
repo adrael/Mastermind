@@ -27,7 +27,7 @@ public class GraphicUI implements ActionListener {
 	private final JFrame window;
 	private final Container globalPane, menuPane, gamePane, playerPane, solutionPane;
 	private final JButton newGame, resetLine, valid, quit, resetPawn,
-			validPlayer, quitPlayer;
+			validPlayer, quitPlayer, rules;
 	private final Mastermind manager;
 	private final JTextField name;
 	private final JSpinner rowsNumber, pawns, colors;
@@ -35,6 +35,7 @@ public class GraphicUI implements ActionListener {
 			playerLabel, solutionLabel;
 	private final ArrayList<PawnGame[]> rows = new ArrayList<>();
 	private final ArrayList<PawnSolution[]> tips = new ArrayList<>();
+	private final Rules gameRules;
 
 	private Player player;
 	private int currentRow = 0, currentPawn = 0, numberOfPawnPerRow = 4,
@@ -44,6 +45,23 @@ public class GraphicUI implements ActionListener {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		this.player = new Player();
+		
+		String[] authors = new String[3];
+		authors[0] = "Raphaël MARQUES";
+		authors[1] = "Jérémie MERCURI";
+		authors[2] = "Félix WATTEZ";
+		
+		this.gameRules = new Rules();
+		this.gameRules.setTitle("Mastermind");
+		this.gameRules.setText("L'ordinateur génère une combinaison de pion aléatoire selon la difficulté choisie.\n" +
+				"A chaque tour, le joueur doit se servir de pions pour remplir une rangée\n" +
+				"selon l'idée qu'il se fait des pions dissimulés.\n\n" +
+				"Une fois les pions placés, l'ordinateur indique :\n\n" +
+				"   - le nombre de pions de la bonne couleur bien placés en utilisant le même nombre de pions rouges\n" +
+				"   - le nombre de pions de la bonne couleur, mais mal placés, avec les pions blancs.\n\n\n\n" +
+				"http://fr.wikipedia.org/wiki/Mastermind");
+		this.gameRules.setAuthors(authors);
+		this.gameRules.prepareRules();
 
 		this.window = new JFrame();
 		this.window.setVisible(true);
@@ -57,6 +75,7 @@ public class GraphicUI implements ActionListener {
 		this.resetLine = new JButton("Effacer la ligne");
 		this.valid = new JButton("Valider");
 		this.resetPawn = new JButton("Effacer le dernier pion");
+		this.rules = new JButton("Règles");
 
 		this.validPlayer = new JButton("Jouer");
 		this.quitPlayer = new JButton("Quitter");
@@ -108,6 +127,7 @@ public class GraphicUI implements ActionListener {
 		this.resetPawn.addActionListener(this);
 		this.resetLine.addActionListener(this);
 		this.newGame.addActionListener(this);
+		this.rules.addActionListener(this);
 		this.valid.addActionListener(this);
 		this.quit.addActionListener(this);
 
@@ -265,11 +285,13 @@ public class GraphicUI implements ActionListener {
 				Component.CENTER_ALIGNMENT);
 		addButton(this.newGame, this.menuPane, 0, 10,
 				Component.CENTER_ALIGNMENT);
+		addButton(this.rules, this.menuPane, 0, 10,
+				Component.CENTER_ALIGNMENT);		
 		addButton(this.quit, this.menuPane, 0, 10, Component.CENTER_ALIGNMENT);
 
 		JLabel scores = new JLabel("SCORES");
-
 		scores.setFont(new Font(scores.getFont().getName(), Font.BOLD, 30));
+		
 		this.CPU.setFont(new Font(this.CPU.getFont().getName(), Font.BOLD, 18));
 		this.playerLabel.setFont(new Font(this.playerLabel.getFont().getName(),
 				Font.BOLD, 18));
@@ -399,6 +421,7 @@ public class GraphicUI implements ActionListener {
 			Integer n = null;
 
 			if (this.manager.checkSolution(this.rows.get(this.currentRow), this.tips.get(this.currentRow))) {
+				displaySolution(true);
 				manageCommands(false);
 				++this.scorePlayer;
 				n = JOptionPane
@@ -460,6 +483,14 @@ public class GraphicUI implements ActionListener {
 		this.currentPawn = 0;
 		this.currentRow = 0;
 	}
+	
+	private void displayRules() {
+		JFrame rules = new JFrame(this.gameRules.getTitle());
+		rules.getContentPane().add(this.gameRules);
+		rules.pack();
+		rules.setVisible(true);
+		rules.setResizable(false);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
@@ -474,6 +505,8 @@ public class GraphicUI implements ActionListener {
 			validation();
 		else if (o == this.newGame)
 			resetAll();
+		else if (o == this.rules)
+			displayRules();
 		else if (o == this.validPlayer) {
 			if (!name.getText().equals("")) {
 				Integer numberOfColors = (Integer) this.colors.getValue();
