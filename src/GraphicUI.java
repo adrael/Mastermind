@@ -151,6 +151,7 @@ public class GraphicUI implements ActionListener {
 		this.globalPane.add(this.menuPane, BorderLayout.EAST);
 		this.window.setTitle("Mastermind - " + this.player.getName());
 		this.window.pack();
+		this.window.setLocationRelativeTo(null);
 	}
 
 	private void createPlayer() {
@@ -160,6 +161,7 @@ public class GraphicUI implements ActionListener {
 		this.globalPane.add(this.playerPane, BorderLayout.CENTER);
 		this.window.setTitle("Infos du joueur");
 		this.window.pack();
+		this.window.setLocationRelativeTo(null);
 	}
 
 	private void initGameDisplay() {
