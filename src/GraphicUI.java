@@ -53,12 +53,12 @@ public class GraphicUI implements ActionListener {
 		
 		this.gameRules = new Rules();
 		this.gameRules.setTitle("Mastermind");
-		this.gameRules.setText("L'ordinateur génère une combinaison de pion aléatoire selon la difficulté choisie.\n" +
+		this.gameRules.setText("L'ordinateur génère une combinaison de pions aléatoire selon la difficulté choisie.\n" +
 				"A chaque tour, le joueur doit se servir de pions pour remplir une rangée\n" +
 				"selon l'idée qu'il se fait des pions dissimulés.\n\n" +
 				"Une fois les pions placés, l'ordinateur indique :\n\n" +
 				"   - le nombre de pions de la bonne couleur bien placés en utilisant le même nombre de pions rouges\n" +
-				"   - le nombre de pions de la bonne couleur, mais mal placés, avec les pions blancs.\n\n\n\n" +
+				"   - le nombre de pions de la bonne couleur, mais mal placés, avec les pions noirs.\n\n\n\n" +
 				"http://fr.wikipedia.org/wiki/Mastermind");
 		this.gameRules.setAuthors(authors);
 		this.gameRules.prepareRules();
