@@ -4,7 +4,7 @@ import java.util.Random;
 public class Mastermind {
 	private PawnGame[] solution; // combinaison générée par la fonction generate
 	private int nbPawn; // nombres de pions
-	private Player player;
+	private Player player; // je pense que ça ne sert à rien
 
 	private final Color[] pawnColors = { Color.RED, Color.YELLOW, Color.GREEN,
 			Color.BLUE, Color.CYAN, Color.PINK, Color.MAGENTA, Color.ORANGE,
@@ -44,6 +44,37 @@ public class Mastermind {
 		return this.solution;
 	}
 
+	public boolean chekSolution(PawnGame[] playerSolution, PawnSolution[] tips){ //donne le nombre de pions bien placés (good) et mal placé (bad) et met ok à true si la combinaison est trouvée
+		int good =0, bad = 0;
+		PawnGame[] player = playerSolution, sol = solution;
+		boolean ok = false;
+		
+		for(int i=0; i<=4; i++){
+			if(player[i]==solution[i]){
+				good++;
+				player[i].setPawnColor(Color.GRAY);
+				sol[i].setPawnColor(Color.GRAY);
+			}
+		}
+		if(good==4) ok = true;
+		else{
+			for(int i=0; i<=4; i++){
+				if(sol[i].getPawnColor()!=Color.GRAY){
+					for(int j=0; j<=4; j++){
+						if(player[j].getPawnColor()!=Color.GRAY){
+							if(player[j]==sol[i]){
+								bad++;
+								player[j].setPawnColor(Color.GRAY);
+								sol[i].setPawnColor(Color.GRAY);
+							}
+						}
+					}
+				}
+			}
+		}
+		return ok;
+	}
+	/*
 	public boolean checkSolution(PawnGame[] playerSolution, PawnSolution[] tips) {
 		boolean good = true;
 
@@ -58,30 +89,6 @@ public class Mastermind {
 						break;
 					}
 		}
-
 		return good;
-	}
+	}*/
 }
-/*
- * public void incNbTry() { nbTry++; }
- * 
- * public int getGoodPawn() //retourne le nombre de pions bien placés; et met
- * result à true si la combinaison est bonne { int nb=0; for(int
- * i=0;i<nbPawn;i++) if(player[i]==solution[i]) nb++; if(nb==nbPawn)
- * result=true; return nb; }
- * 
- * public int getBadPawn() //retroune le nombre de pions mal placés. { int nb=0;
- * 
- * return nb; }
- * 
- * public boolean getResult() { return result; } }
- * 
- * public int getMalPlace() //return le nombre de couleurs mal placÃ©es { int
- * nbMal=0; int k=0; Color joueurCombi[]; joueurCombi = new Color[nbCouleur];
- * Color laCombi[]; laCombi = new Color[nbCouleur];
- * 
- * for(int i=0;i<nbCouleur;i++) { if(laSolution[i] != joueurSolution[i]) {
- * laCombi[k] = laSolution[i]; joueurCombi[k] = joueurSolution[i]; k++; } }
- * for(int i=0;i<k;i++) { int j=0; while(j<k) { if(joueurCombi[i] == laCombi[j])
- * { nbMal++; laCombi[j] = null; j=k+1; } else { j++; } } } return nbMal; }
- */
